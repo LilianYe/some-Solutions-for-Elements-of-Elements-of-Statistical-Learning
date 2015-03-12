@@ -1,0 +1,122 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{bm}
+
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed}
+
+\begin{document}
+\author{Cheng Chen, 1130339005}
+\title{Homework of Chapter 2}
+\maketitle
+
+\begin{flushleft}
+\textbf{Ex. 2.4}
+\end{flushleft}
+\begin{sol}
+%If $\bm{X} \sim N(\bm{\mu},\bm{\Sigma})$ and $E[\bm{X}] = \bm{\mu}, Var[\bm{X}]=\bm{\Sigma}$, then $$E[\bm{AX}] = \bm{A}\bm{\mu}, Var[\bm{AX}]=\bm{A\Sigma A^T}$$
+Since $X \sim N(\bm{0},\bm{I}_p)$,\\
+We have $$Z=a^{T}X=\frac{x_0^T}{\|x\|}X \sim N(0, \frac{x_0^T}{\|x\|}\bm{I}_p\frac{x_0}{\|x\|})=N(0,1)$$
+Therefore, $z_i$ are distributed $N(0,1)$.
+\end{sol}
+
+\begin{flushleft}
+\textbf{Ex. 2.7}
+\end{flushleft}
+\begin{sol}
+\begin{flushleft}
+(a) We define $\bm{X}$ as textbook did:
+$$\bm{X}_{N\times (p+1)}=\left(\begin{matrix}
+1 & \bm{x}_1^T \\
+\vdots & \vdots \\
+1 & \bm{x}_N^T
+\end{matrix} \right) $$
+The linear regression is $\hat{f}(\bm{x}_0)=\left(\begin{matrix}
+1 & \bm{x}_0^T\end{matrix}\right)\bm{\hat{\beta}}$, where $\hat{\bm{\beta}}=(\bm{X}^T\bm{X})^{-1}\bm{X}^T\bm{y}$.\\
+So,we have $$\hat{f}(\bm{x}_0)=\left(\begin{matrix}
+1 & \bm{x}_0^T\end{matrix}\right)(\bm{X}^T\bm{X})^{-1}\bm{X}^T\bm{y}$$
+In terms of the notation of the question,$$\ell _i(\bm{x}_0;\mathcal{X})=\left(\begin{matrix}
+1 & \bm{x}_0^T\end{matrix}\right)(\bm{X}^T\bm{X})^{-1}\left(\begin{matrix}
+1 \\
+\bm{x}_i
+\end{matrix}\right) $$
+Consider the $k$-nearest-neighbour regression,
+$$
+\ell _i(\bm{x}_0;\mathcal{X})=\begin{cases}
+\frac{1}{k} & \bm{x}_0\in S \\
+0 & \bm{x}_0\notin S
+\end{cases}
+$$
+where $S$ is the set of $k$-nearest-neighbour points.
+
+(b)
+\begin{equation}
+\nonumber
+\begin{split}
+&E_{\mathcal{Y}\vert\mathcal{X}}(f(\bm{x_0})-\hat{f}(\bm{x}_0))^2 \\
+=&f^2(\bm{x_0})+E_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}^2(\bm{x}_0))-2f(\bm{x_0})E_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0))\\
+=&(f(\bm{x_0})-E_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0)))^2+(E_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}^2(\bm{x}_0))-E_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0))^2)\\
+=&(Bias_{\mathcal{Y}\vert\mathcal{X}})^2+Var_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0))
+\end{split}
+\end{equation}
+(c)
+\begin{equation}
+\nonumber
+\begin{split}
+&E_{\mathcal{Y},\mathcal{X}}(f(\bm{x_0})-\hat{f}(\bm{x}_0))^2 \\
+=&(f(\bm{x_0})-E_{\mathcal{Y},\mathcal{X}}(\hat{f}(\bm{x}_0)))^2+(E_{\mathcal{Y},\mathcal{X}}(\hat{f}^2(\bm{x}_0))-E_{\mathcal{Y},\mathcal{X}}(\hat{f}(\bm{x}_0))^2)\\
+=&(Bias_{\mathcal{Y},\mathcal{X}})^2+Var_{\mathcal{Y},\mathcal{X}}(\hat{f}(\bm{x}_0))
+\end{split}
+\end{equation}
+(d)
+First of all,Since
+$$
+E_{\mathcal{X}}(E_{\mathcal{Y}\vert\mathcal{X}}(f(\bm{x_0})-\hat{f}(\bm{x}_0))^2) = E_{\mathcal{Y},\mathcal{X}}(f(\bm{x_0})-\hat{f}(\bm{x}_0))^2
+$$
+We have
+$$
+E_{\mathcal{X}}(Bias^2_{\mathcal{Y}\vert\mathcal{X}})+E_{\mathcal{X}}(Var_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0)))
+=(Bias_{\mathcal{Y},\mathcal{X}})^2+Var_{\mathcal{Y},\mathcal{X}}(\hat{f}(\bm{x}_0))
+$$
+Secondly, %for $E_{\mathcal{Y}\vert\mathcal{X}}[\hat{f}(\bm{x}_0)]$, we have,
+\begin{equation}
+\nonumber
+\begin{split}
+&E_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0))\\
+=&E_{\mathcal{Y}\vert\mathcal{X}}\left(\sum_{i=1}^{N}\ell _i(\bm{x}_0;\mathcal{X})y_i\right)\\
+=&E_{\mathcal{Y}\vert\mathcal{X}}\left(\sum_{i=1}^{N}\ell _i(\bm{x}_0;\mathcal{X})(f(\bm{x}_i)+\varepsilon_i)\right)\\
+=&\sum_{i=1}^{N}\ell _i(\bm{x}_0;\mathcal{X})f(\bm{x}_i)
+\end{split}
+\end{equation}
+So,
+\begin{equation}
+\nonumber
+\begin{split}
+&(Bias_{\mathcal{Y},\mathcal{X}})^2\\
+=&(f(\bm{x_0})-E_{\mathcal{Y},\mathcal{X}}(\hat{f}(\bm{x}_0)))^2\\
+=&(f(\bm{x_0})-E_{\mathcal{X}}(E_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0))))^2\\
+=&\left(f(\bm{x_0})-E_{\mathcal{X}}\left(\sum_{i=1}^{N}\ell _i(\bm{x}_0;\mathcal{X})f(\bm{x}_i)\right)\right)^2\\
+=&\left(E_{\mathcal{X}}\left(f(\bm{x_0})-\sum_{i=1}^{N}\ell _i(\bm{x}_0;\mathcal{X})f(\bm{x}_i)\right)\right)^2\\
+\le&E_{\mathcal{X}}\left(f(\bm{x_0})-\sum_{i=1}^{N}\ell _i(\bm{x}_0;\mathcal{X})f(\bm{x}_i)\right)^2\\
+%&(using \,\,\, Jensen's \,\,\, inequation)\\
+=&E_{\mathcal{X}}((Bias_{\mathcal{Y}\vert\mathcal{X}})^2)
+\end{split}
+\end{equation}
+Since $$
+E_{\mathcal{X}}((Bias_{\mathcal{Y}\vert\mathcal{X}})^2)+E_{\mathcal{X}}(Var_{\mathcal{Y}\vert\mathcal{X}}(\hat{f}(\bm{x}_0)))=
+(Bias_{\mathcal{Y},\mathcal{X}})^2+Var_{\mathcal{Y},\mathcal{X}}(\hat{f}(\bm{x}_0))
+$$
+We can achieve the relationship between the squared biases and variances as follows:
+$$(Bias_{\mathcal{Y},\mathcal{X}})^2 \le E_{\mathcal{X}}((Bias_{\mathcal{Y}\vert\mathcal{X}})^2)$$
+and,
+$$Var_{\mathcal{Y},\mathcal{X}} \geq E_{\mathcal{X}}(Var_{\mathcal{Y}\vert\mathcal{X}})$$
+%That's the relationship between the squared biases and variances in (b) and (c).
+\end{flushleft}
+\end{sol}
+\end{document}

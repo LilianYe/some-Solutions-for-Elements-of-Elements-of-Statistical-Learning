@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{bm}
+
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed}
+
+\begin{document}
+\author{Chen Cheng, 1130339005}
+\title{Homework of Chapter 8}
+\maketitle
+%% 8.1
+\begin{flushleft}
+\textbf{Ex. 8.1}
+\end{flushleft}
+
+\begin{sol}
+Since log function is a strictly concave function. Using Jensen's inequality, we have
+\begin{equation*}
+\begin{split}
+&E_qlog[r(Y)/q(Y)]\\
+\leq&logE_q[r(Y)/q(Y)]\\
+=&log\int[r(y)/q(y)]q(y)\mathrm{d}y\\
+=&log\int r(y)\mathrm{d}y\\
+=&log 1\\
+=&0\\
+\end{split}
+\end{equation*}
+The Jensen's equality shows that $E_qlog[r(Y)/q(Y)]$ is maximized as a function of $r(y)$ when $r(y)=q(y)$.\\
+According to the definition of (8.46), we have
+\begin{equation*}
+\begin{split}
+R(\theta',\theta)=&E[\ell_1(\theta',\mathbf{Z}^M|\mathbf{Z})|\mathbf{Z},\theta]\\
+=&E[logPr(\mathbf{Z}^M|\mathbf{Z},\theta')|\mathbf{Z},\theta]\\
+R(\theta,\theta)=&E[\ell_1(\theta,\mathbf{Z}^M|\mathbf{Z})|\mathbf{Z},\theta]\\
+=&E[logPr(\mathbf{Z}^M|\mathbf{Z},\theta)|\mathbf{Z},\theta]\\
+\end{split}
+\end{equation*}
+Then, using the equality we have just proved above, we can get
+\begin{equation*}
+\begin{split}
+R(\theta',\theta)-R(\theta,\theta)=
+&E[logPr(\mathbf{Z}^M|\mathbf{Z},\theta')|\mathbf{Z},\theta]-E[logPr(\mathbf{Z}^M|\mathbf{Z},\theta)|\mathbf{Z},\theta]\\
+=&E[log(Pr(\mathbf{Z}^M|\mathbf{Z},\theta')/Pr(\mathbf{Z}^M|\mathbf{Z},\theta))|\mathbf{Z},\theta]\\
+&\leq0\\
+\end{split}
+\end{equation*}
+Thus, we have proved $R(\theta,\theta)\geq R(\theta',\theta)$.\\
+\end{sol}
+
+%% 8.3
+\def \Ult {U_\ell^{(t)}}
+\def \ult {u_\ell^{(t)}}
+\begin{flushleft}
+\textbf{Ex. 8.3}
+\end{flushleft}
+
+\begin{sol}
+\begin{equation*}
+\begin{split}
+&E_{\Ult}[Pr(u|\Ult,\ell\neq k)]\\
+=&\int Pr(u|\ult,\ell\neq k)Pr(\ult,\ell\neq k)\mathrm{d}\ell\neq k\\
+=&Pr_{U_k}(u)\\
+\end{split}
+\end{equation*}
+So, we have
+\begin{equation*}
+\begin{split}
+E[\hat{Pr}_{U_k}(u)]=&E[\frac{1}{M-m+1}\sum_{t=m}^MPr(u|\Ult,\ell\neq k)]\\
+=&\frac{1}{M-m+1}\sum_{t=m}^ME[Pr(u|\Ult,\ell\neq k)]\\
+=&Pr_{U_k}(u)\\
+\end{split}
+\end{equation*}
+Thus, we have justified the estimate (8.50).\\
+\end{sol}
+\end{document}

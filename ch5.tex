@@ -1,0 +1,276 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{bm}
+
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed}
+
+\begin{document}
+\author{Chen Cheng, 1130339005}
+\title{Homework of Chapter 5}
+\maketitle
+
+%%5.9
+\begin{flushleft}
+\textbf{Ex. 5.9}
+\end{flushleft}
+\def \U {\mathbf{U}}
+\def \D {\mathbf{D}}
+\def \V {\mathbf{V}}
+\begin{sol}
+
+Let $\mathbf{N}=\mathbf{U}\mathbf{D}\mathbf{V}^T$, and we have\\
+\begin{equation*}
+\begin{split}
+\mathbf{S}_\lambda=&\U\D\V^T(\V\D\U^T\U\D\V^T+\lambda\mathbf{\Omega}_N)^{-1}(\U\D\V^T)^T\\
+=&\U(\D^{-1}\V^T\V\D^2\V^T\V\D^{-1}+\lambda\D^{-1}\V^T\mathbf{\Omega}_N\V\D^{-1})^{-1}\mathbf{U}^T\\
+=&(\U\U^T+\lambda\U\D^{-1}\V^T\mathbf{\Omega}_N\V\D^{-1}\U^T)^{-1}\\
+=&(\mathbf{I}+\lambda\U\D^{-1}\V^T\mathbf{\Omega}_N\V\D^{-1}\U^T)^{-1}\\
+=&(\mathbf{I}+\lambda\mathbf{K})^{-1}\\
+\end{split}
+\end{equation*}
+This the the Reinsch form for the smoothing spline.
+\end{sol}
+\\
+%%5.13
+\begin{flushleft}
+\textbf{Ex. 5.13}
+\end{flushleft}
+\def \s {\mathbf{S}_\lambda}
+\def \f {\hat{f}_\lambda}
+\begin{sol}
+We assume that $\f'(x)$ is the new smoothing spline trained by $N+1$ samples: $(x_0,\f^{(-0)}(x_0)),(x_1,y_1),(x_2,y_2),...,(x_N,y_N)$, and $\f^{(-0)}(x)$ represents the old smoothing spline trained by N pairs $(x_1,y_1),(x_2,y_2),...,(x_N,y_N)$.\\
+We can find that $\f^{(-0)}$ is the solution of the following problem:
+$$\min_fRSS(f)=\min_f\sum_{i=1}^N\{y_i-f(x_i)\}^2+\lambda\int\{f''(t)\}^2\mathrm{d}t$$
+and $\f'$ is the solution of the following problem:
+$$\min_fRSS(f)=\min_f\sum_{i=1}^N\{y_i-f(x_i)\}^2+(\f^{(-0)}(x_0)-f(x_0))^2+\lambda\int\{f''(t)\}^2\mathrm{d}t$$
+Then
+\begin{equation*}
+\begin{split}
+&\sum_{i=1}^N\{y_i-f(x_i)\}^2+(\f^{(-0)}(x_0)-f(x_0))^2+\lambda\int\{f''(t)\}^2\mathrm{d}t\\
+\geq &\sum_{i=1}^N\{y_i-f(x_i)\}^2+\lambda\int\{f''(t)\}^2\mathrm{d}t\\
+\geq &\sum_{i=1}^N\{y_i-\f^{(-0)}(x_i)\}^2+\lambda\int\{{\f''^{(-0)}}(t)\}^2\mathrm{d}t\\
+= &\sum_{i=1}^N\{y_i-\f^{(-0)}(x_i)\}^2+(\f^{(-0)}(x_0)-\f^{(-0)}(x_0))^2+\lambda\int\{\f''^{(-0)}(t)\}^2\mathrm{d}t\\
+\end{split}
+\end{equation*}
+with equality iff $f(x_i)=\f^{(-0)}(x_i)$ for $i=0,1,...,N$\\
+So, $\f'(x_i)=\f^{(-0)}(x_i)$ for $i=0,1,...,N$\\
+Now, we begin to derive the formula (5.26)\\
+Let
+$$y'_i=\left\{
+\begin{matrix}
+\f^{(-0)}(x_0) & i=0\\
+y_i & i\neq0\\
+\end{matrix}
+\right.$$
+As $\mathbf{f}'=\s'\mathbf{y}'$, We have
+$$\f^{(-0)}(x_0)=\f'(x_0)=\sum_{i=0}^{N}\s'(0,i)y_i'$$
+Let $\f(x)=\s\mathbf{y}$ is the smoothing spline trained by $N+1$ samples:\\
+$(x_0,y_0),(x_1,y_1),...,(x_N,y_N)$.\\
+As $\s$ is only depend on $x_i$ and $\lambda$, we have $\s'=\s$.\\
+Then,
+\begin{equation*}
+\begin{split}
+y_0-\f(x_0)=&y_0-\sum_{i=0}^{N}\s(0,i)y_i\\
+=&y_0-\s(0,0)y_0-\sum_{i=1}^N\s(0,i)y_i\\
+=&y_0-\s(0,0)y_0-\sum_{i=1}^N\s'(0,i)y_i'\\
+=&y_0-\s(0,0)y_0-\left[\sum_{i=0}^N\s'(0,i)y_i'-\s'(0,0)y_0'\right]\\
+=&y_0-\s(0,0)y_0-\left[\f^{(-0)}(x_0)-\s(0,0)\f^{(-0)}(x_0)\right]\\
+=&[1-\s(0,0)][y_0-\f^{(-0)}(x_0)]\\
+\end{split}
+\end{equation*}
+So,
+$$y_0-\f^{(-0)}(x_0)=\frac{y_0-\f(x_0)}{1-\s(0,0)}$$
+Similarly, we can get
+$$y_i-\f^{(-i)}(x_i)=\frac{y_i-\f(x_i)}{1-\s(i,i)} \hspace{1em} i=0,1,...,N$$
+From this, we have
+\begin{equation*}
+\begin{split}
+CV(\f)=&\frac{1}{N}\sum_{i=1}^{N}(y_i-\f^{(-i)})^2\\
+=&\frac{1}{N}\sum_{i=1}^{N}\left(\frac{y_i-\f(x_i)}{1-\s(i,i)}\right)^2\\
+\end{split}
+\end{equation*}
+\end{sol}
+\let \f \undefined
+\let \s \undefined
+
+%%5.15
+\begin{flushleft}
+\textbf{Ex. 5.15}
+\end{flushleft}
+\def \hk {\mathcal{H}_K}
+\begin{sol}
+Suppose $f(x)=\sum\limits_{i=1}^{\infty}c_i\phi_i(x)$, $h(x)=\sum\limits_{i=1}^{\infty}d_i\phi_i(x)$, and $K(x,y)=\sum\limits_{i=1}^{\infty}\gamma_i\phi_i(x)\phi_i(y)$.\\
+According to the property of RKHS, we have
+\begin{equation*}
+\begin{split}
+\langle f(x),h(x)\rangle_{\hk}=&\frac{1}{4}(\|f(x)+h(x)\|^2_{\hk}-\|f(x)-h(x)\|^2_{\hk})\\
+=&\frac{1}{4}\sum\limits_{i=1}^{\infty}\frac{(c_i+d_i)^2+(c_i-d_i)^2}{\gamma_i}\\
+=&\sum\limits_{i=1}^{\infty}\frac{c_id_i}{\gamma_i}\\
+\end{split}
+\end{equation*}
+(a) Using the property of RKHS, we have
+\begin{equation*}
+\begin{split}
+&\langle K(\cdot,x_i),f\rangle_{\hk}\\
+=&\langle\sum\limits_{j=1}^{\infty}\gamma_j\phi_j(\cdot)\phi_j(x_i),\sum\limits_{j=1}^{\infty}c_j\phi_j(\cdot)\rangle_{\hk}\\
+=&\sum\limits_{j=1}^{\infty}\frac{\gamma_j\phi_j(x_i)c_j}{\gamma_j}\\
+=&f(x_i)\\
+\end{split}
+\end{equation*}
+\\
+(b) Using the property of RKHS, we have
+\begin{equation*}
+\begin{split}
+&\langle K(\cdot,x_i),K(\cdot,x_j)\rangle_{\hk}\\
+=&\langle\sum\limits_{k=1}^{\infty}\gamma_k\phi_k(\cdot)\phi_k(x_i),\sum\limits_{k=1}^{\infty}\gamma_k\phi_k(\cdot)\phi_k(x_j)\rangle_{\hk}\\
+=&\sum\limits_{k=1}^{\infty}\frac{\gamma_k\phi_k(x_i)\gamma_k\phi_k(x_j)}{\gamma_k}\\
+=&K(x_i,x_j)\\
+\end{split}
+\end{equation*}
+\\
+(c) Using the result of (b), we have
+\begin{equation*}
+\begin{split}
+J(g(x))=&\langle g(x),g(x)\rangle_{\hk}\\
+=&\langle\sum_{i=1}^N\alpha_iK(x,x_i),\sum_{j=1}^N\alpha_jK(x,x_j)\rangle_{\hk}\\
+=&\sum_{i=1}^N\sum_{j=1}^N\langle K(x,x_i),K(x,x_j)\rangle_{\hk}\alpha_i\alpha_j\\
+=&\sum_{i=1}^N\sum_{j=1}^NK(x_i,x_j)\alpha_i\alpha_j\\
+\end{split}
+\end{equation*}
+(d) 
+Using the result of (a) and the fact that $\rho$ is orthogonal to each of $K(x,x_i)$, we have
+\begin{equation*}
+\begin{split}
+\widetilde{g}(x_i)=&\langle K(\cdot,x_i),\widetilde{g}\rangle_{\hk}\\
+=&\langle K(\cdot,x_i),g+\rho\rangle_{\hk}\\
+=&\langle K(\cdot,x_i),g\rangle_{\hk}+\langle K(\cdot,x_i),\rho\rangle_{\hk}\\
+=&\langle K(\cdot,x_i),g\rangle_{\hk}\\
+=&g(x_i)\\
+\end{split}
+\end{equation*}
+Moreover, we have
+\begin{equation*}
+\begin{split}
+\langle g,\rho\rangle=&\langle\sum_{i=1}^N\alpha_iK(x,x_i),\rho\rangle_{\hk}\\
+=&\sum_{i=1}^N\alpha_i\langle K(x,x_i),\rho\rangle_{\hk}\\
+=&0\\
+\end{split}
+\end{equation*}
+Therefore,
+\begin{equation*}
+\begin{split}
+J{(\widetilde{g})}=&\langle g+\rho,g+\rho\rangle_{\hk}\\
+=&J(g)+2\langle g,\rho\rangle_{\hk}+J(\rho)\\
+=&J(g)+J(\rho)\\
+\geq &J(g)\\
+\end{split}
+\end{equation*}
+with equality iff $\rho(x)=0$.\\
+Then, we can get the conclusion:
+$$\sum_{i=1}^NL(y_i,\widetilde{g}(x_i))+\lambda J(\widetilde{g})\geq\sum_{i=1}^NL(y_i,g(x_i))+\lambda J(g)$$
+with equality iff $\rho(x)=0$.
+\end{sol}
+
+%% 5.16
+\begin{flushleft}
+\textbf{Ex. 5.16}
+\end{flushleft}
+\begin{sol}
+By the property of RKHS, we can know that $\{\phi_i(x)\}$ is an orthonormal basis. which means:
+$$\forall m,k\in\mathbb{N},\int\phi_m(x)\phi_k(x)\,\mathrm{d}x=\delta(m,k)=\left\{\begin{matrix}1 & m=k\\0 & m\neq k\end{matrix}\right.$$
+According to the definition of the Kernel, we have
+\begin{equation}
+\begin{split}
+&\sum\limits_{m=1}^{\infty}\gamma_m\phi_m(x)\phi_m(y)=K(x,y)=\sum_{m=1}^Mh_m(x)h_m(y)\\
+\Longrightarrow &\sum\limits_{m=1}^{\infty}\gamma_m\phi_m(x)\phi_m(y)\phi_k(x)\phi_l(y)=\sum_{m=1}^Mh_m(x)h_m(y)\phi_k(x)\phi_l(y)\\
+\Longrightarrow &\int\left(\sum\limits_{m=1}^{\infty}\int\gamma_m\phi_m(x)\phi_m(y)\phi_k(x)\phi_l(y)\mathrm{d}x\right)\mathrm{d}y
+=\int\left(\sum_{m=1}^M\int h_m(x)h_m(y)\phi_k(x)\phi_l(y)\mathrm{d}x\right)\mathrm{d}y\\
+\Longrightarrow &\int\left(\sum\limits_{m=1}^{\infty}\gamma_m\phi_m(y)\phi_l(y)\int\phi_m(x)\phi_k(x)\mathrm{d}x\right)\mathrm{d}y
+=\int\left(\sum_{m=1}^Mh_m(y)\phi_l(y)\int h_m(x)\phi_k(x)\mathrm{d}x\right)\mathrm{d}y\\
+\Longrightarrow &\int\gamma_k\phi_k(y)\phi_l(y)\mathrm{d}y=\int\sum_{m=1}^Mh_m(y)\phi_l(y)\mathrm{d}y\int h_m(x)\phi_k(x)\mathrm{d}x\\
+\Longrightarrow &\gamma_k\delta(k,l)=\sum_{m=1}^M\int h_m(y)\phi_l(y)\mathrm{d}y\int h_m(x)\phi_k(x)\mathrm{d}x\\
+\end{split}
+\end{equation}
+Suppose that $G$ is an $M \times M$ matrix and $G_{km} = \int h_m(x)\phi_k(x)\mathrm{d}x$.\\
+Then, according to (1), we have $\mathbf{GG}^T=diag(\gamma_1,\gamma_2,\dots,\gamma_M)=\mathbf{D}_\gamma$.\\
+Assume that $\phi(x)=[\phi_1(x),\phi_2(x),\dots,\phi_M(x)]^T$, and $h(x)=[h_1(x),h_2(x),\dots,h_M(x)]^T$\\
+We have
+\begin{equation*}
+\begin{split}
+&\sum\limits_{m=1}^{\infty}\gamma_m\phi_m(x)\phi_m(y)=K(x,y)=\sum_{m=1}^Mh_m(x)h_m(y)\\
+\Longrightarrow &\sum\limits_{m=1}^{\infty}\int\gamma_m\phi_m(x)\phi_m(y)\phi_k(y)\mathrm{d}y=\sum_{m=1}^M\int h_m(x)h_m(y)\phi_k(y)\mathrm{d}y\\
+\Longrightarrow &\sum\limits_{m=1}^{\infty}\gamma_m\phi_m(x)\delta(m,k)=\sum_{m=1}^Mh_m(x)\int h_m(y)\phi_k(y)\mathrm{d}y\\
+\Longrightarrow &\gamma_k\phi_k(x)=\sum_{m=1}^Mh_m(x)\mathbf{G}_{km}\\
+\Longrightarrow &\mathbf{D}_\gamma\phi(x)=\mathbf{G}h(x)\\
+\Longrightarrow &h(x)=\mathbf{G}^{-1}\mathbf{D}_\gamma^{\frac{1}{2}}\mathbf{D}_\gamma^{\frac{1}{2}}\phi(x)\\
+\end{split}
+\end{equation*}
+Let $\mathbf{V}=\mathbf{G}^{-1}\mathbf{D}_\gamma^{\frac{1}{2}}$, we can show that $\mathbf{V}$ is an orthogonal matrix:
+\begin{equation*}
+\begin{split}
+\mathbf{V}^T\mathbf{V}=&(\mathbf{G}^{-1}\mathbf{D}_\gamma^{\frac{1}{2}})^T\mathbf{G}^{-1}\mathbf{D}_\gamma^{\frac{1}{2}}\\
+=&\mathbf{D}_\gamma^{\frac{1}{2}}(\mathbf{G}^T)^{-1}\mathbf{G}^{-1}\mathbf{D}_\gamma^{\frac{1}{2}}\\
+=&\mathbf{D}_\gamma^{\frac{1}{2}}(\mathbf{GG}^T)^{-1}\mathbf{D}_\gamma^{\frac{1}{2}}\\
+=&\mathbf{D}_\gamma^{\frac{1}{2}}\mathbf{D}_\gamma^{-1}\mathbf{D}_\gamma^{\frac{1}{2}}\\
+=&\mathbf{I}\\
+\end{split}
+\end{equation*}
+Therefore, $h(x)=\mathbf{VD}_\gamma^{\frac{1}{2}}\phi(x)$.\\
+Then, we prove that (5.63) is equivalent to (5.53).\\
+Let $\beta = [\beta_1,\beta_2,\dots,\beta_M]^T$, $c=\mathbf{D}_\gamma^{\frac{1}{2}}\mathbf{V}^T\beta$, we have
+\begin{equation*}
+\begin{split}
+&\min_{\{\beta_m\}_1^M}\sum_{i=1}^N\left(y_i-\sum_{m=1}^M\beta_mh_m(x_i)\right)^2+\lambda\sum_{m=1}^M\beta_m^2\\
+=&\min_{\beta}\sum_{i=1}^N\left(y_i-\beta^T\mathbf{VD}_\gamma^{\frac{1}{2}}\phi(x)\right)^2+\lambda\beta^T\beta\\
+=&\min_{c}\sum_{i=1}^N\left(y_i-c^T\phi(x)\right)^2+\lambda(\mathbf{VD}_\gamma^{-\frac{1}{2}}c)^T\mathbf{VD}_\gamma^{-\frac{1}{2}}c\\
+=&\min_{c}\sum_{i=1}^N\left(y_i-c^T\phi(x)\right)^2+\lambda c^T\mathbf{D}_\gamma^{-1}c\\
+=&\min_{\{c_j\}_1^{\infty}}\sum_{i=1}^N\left(y_i-\sum_{j=1}^{\infty}c_j\phi_j(x_i)\right)^2+\lambda\sum_{j=1}^{\infty}\frac{c_j^2}{\gamma_j}\\
+\end{split}
+\end{equation*}
+(b) We can rewrite (5.63) as $\min\limits_{\beta}(y-\mathbf{H}\beta)^T(y-\mathbf{H}\beta)+\lambda\beta^T\beta$ and solve $\beta$:
+$$\hat{\beta}=(\mathbf{H}^T\mathbf{H}+\lambda\mathbf{I})^{-1}\mathbf{H}^Ty$$
+As $\mathbf{H}^T\mathbf{H}+\lambda\mathbf{I}$ is positive definite matrix, it is also invertible, and so as $\mathbf{H}\mathbf{H}^T+\lambda\mathbf{I}$.\\
+Then, we notice the following result:
+\begin{equation*}
+\begin{split}
+&\mathbf{H}^T\mathbf{H}\mathbf{H}^T+\lambda\mathbf{H}^T=\mathbf{H}^T\mathbf{H}\mathbf{H}^T+\lambda\mathbf{H}^T\\
+\iff &\mathbf{H}^T(\mathbf{H}\mathbf{H}^T+\lambda\mathbf{I})=(\mathbf{H}^T\mathbf{H}+\lambda\mathbf{I})\mathbf{H}^T\\
+\iff &(\mathbf{H}^T\mathbf{H}+\lambda\mathbf{I})^{-1}\mathbf{H}^T=\mathbf{H}^T(\mathbf{H}\mathbf{H}^T+\lambda\mathbf{I})^{-1}\\
+\Longrightarrow &\mathbf{H}(\mathbf{H}^T\mathbf{H}+\lambda\mathbf{I})^{-1}\mathbf{H}^Ty=\mathbf{H}\mathbf{H}^T(\mathbf{H}\mathbf{H}^T+\lambda\mathbf{I})^{-1}y\\
+\end{split}
+\end{equation*}
+So, we have
+\begin{equation*}
+\begin{split}
+\hat{\mathbf{f}}=&\mathbf{H}\hat{\beta}\\
+=&\mathbf{H}(\mathbf{H}^T\mathbf{H}+\lambda\mathbf{I})^{-1}\mathbf{H}^Ty\\
+=&\mathbf{H}\mathbf{H}^T(\mathbf{H}\mathbf{H}^T+\lambda\mathbf{I})^{-1}y\\
+=&\mathbf{K}(\mathbf{K}+\lambda\mathbf{I})^{-1}y\\
+\end{split}
+\end{equation*}
+(c) Using the result of (b), we have $\hat{\beta}=\mathbf{H}^T\hat{\alpha}$\\
+Then,
+\begin{equation*}
+\begin{split}
+\hat{f}(x)=&h(x)^T\hat{\beta}\\
+=&h(x)^T\mathbf{H}^T\hat{\alpha}\\
+=&h(x)^T[h_1(x),h_2(x),\dots,h_N(x)]\hat{\alpha}\\
+=&[K(x,x_1),K(x,x_2),\dots,K(x,x_N)][\hat{\alpha}_1,\hat{\alpha}_2,\dots,\hat{\alpha}_N]^T\\
+=&\sum_{i=1}^NK(x,x_i)\hat{\alpha}_i\\
+\end{split}
+\end{equation*}
+(d)When $M<N$,$K$ may be not invertible.\\
+If $\lambda>0$, since $(\mathbf{K}+\lambda\mathbf{I})^{-1}$ is still invertible, the result of (b) and (c) still hold.\\
+If $\lambda=0$, since $\mathbf{H}^T\mathbf{H}$ is still invertible, we have
+$$\hat{\beta}=(\mathbf{H}^T\mathbf{H})^{-1}\mathbf{H}^Ty$$
+So,
+$$\hat{f}(x)=h(x)^T\hat{\beta}=h(x)^T(\mathbf{H}^T\mathbf{H})^{-1}\mathbf{H}^Ty$$
+\end{sol}
+\end{document}

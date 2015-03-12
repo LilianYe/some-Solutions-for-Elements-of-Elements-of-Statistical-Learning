@@ -1,0 +1,95 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{bm}
+
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed}
+
+\begin{document}
+\author{Cheng Chen, 1130339005}
+\title{Homework of Chapter 3}
+\maketitle
+
+\begin{flushleft}
+\textbf{Ex. 3.5}
+\end{flushleft}
+
+\begin{sol}
+\begin{equation}
+\nonumber
+\begin{split}
+&\mathop{argmin}\limits_{\beta^{c}}\left\{\sum^{N}_{i=1}[y_{i}-\beta^{c}_{0}-\sum^{p}_{j=1}(x_{ij}-\overline{x}_{j})\beta^{c}_{j}]^{2}+\lambda\sum^{p}_{j=1}{\beta^{c}_{j}}^{2}\right\}\\
+=&\mathop{argmin}\limits_{\beta^{c}}\left\{\sum^{N}_{i=1}(y_{i}-\beta^{c}_{0}-\sum^{p}_{j=1}{x_{ij}\beta^{c}_{j}}+\sum^{p}_{j=1}\overline{x}_{j}\beta^{c}_{j})^{2}+\lambda\sum^{p}_{j=1}{\beta^{c}_{j}}^{2}\right\}\\
+=&\mathop{argmin}\limits_{\beta^{c}}\left\{\sum^{N}_{i=1}[y_{i}-(\beta^{c}_{0}-\sum^{p}_{j=1}\overline{x}_{j}\beta^{c}_{j})-\sum^{p}_{j=1}x_{ij}\beta^{c}_{j}]^{2}+\lambda\sum^{p}_{j=1}{\beta^{c}_{j}}^{2}\right\}\\
+\end{split}
+\end{equation}
+By comparing the above expression with (3.41), we can get the correspondence between $\beta^{c}$ and the original $\beta$:
+$$\beta_{0}=\beta^{c}_{0}-\sum^{p}_{j=1}\overline{x}_{j}\beta^{c}_{j}$$
+$$\beta_{j}=\beta^{c}_{j} \hspace{1em} j=1,2,...,p$$
+So, the new problem is equivalent to the ridge regression problem (3.41).\\
+For the lasso, we have the same result:
+$$\beta_{0}=\beta^{c}_{0}-\sum^{p}_{j=1}\overline{x}_{j}\beta^{c}_{j}$$
+$$\beta_{j}=\beta^{c}_{j} \hspace{1em} j=1,2,...,p$$
+and
+\begin{equation*}
+\begin{split}
+&\mathop{argmin}\limits_{\beta^{c}}\left\{\sum^{N}_{i=1}[y_{i}-\beta^{c}_{0}-\sum^{p}_{j=1}(x_{ij}-\overline{x}_{j})\beta^{c}_{j}]^{2}+\lambda\sum^{p}_{j=1}|\beta^{c}_{j}|\right\}\\
+=&\mathop{argmin}\limits_{\beta}\left\{\sum^{N}_{i=1}[y_{i}-\beta_{0}-\sum^{p}_{j=1}x_{ij}]^{2}+\lambda\sum^{p}_{j=1}|\beta^{c}_{j}|\right\}\\
+\end{split}
+\end{equation*}
+\end{sol}
+
+\begin{flushleft}
+\textbf{Ex. 3.7}
+\end{flushleft}
+
+\begin{sol}
+As $\beta_j \sim N(0,\tau^2 ), j=1,...,p$ and $y_i \sim N(\beta_0+x_i^T \beta,\sigma^2), i=1,2,...,N$, we can get:
+\begin{equation}
+\nonumber
+\begin{split}
+P\left( {y|\beta} \right) =& \prod_{i = 1}^N P\left( {{y_i}|\beta } \right) \\
+=& \prod_{i = 1}^N \frac{1}{\sqrt{2\pi}\sigma}\exp\left\{-\frac{(y_i-(\beta _0+x_i^T\beta))^2}{2\sigma ^2}\right\} \\
+=& \frac{1}{(\sqrt{2\pi}\sigma)^N}\exp\left\{\sum_{i = 1}^{N}-\frac{(y_i-(\beta _0+x_i^T\beta))^2}{2\sigma ^2}\right\}
+\end{split}
+\end{equation}
+and
+\begin{equation}
+\nonumber
+\begin{split}
+P\left(\beta\right) =& \prod_{j = 1}^p P(\beta_j) \\
+=& \prod_{j=1}^p \frac{1}{\sqrt{2\pi}\tau}\exp\left\{-\frac{\beta_j^2}{2\tau^2}\right\} \\
+=& \frac{1}{(\sqrt{2\pi}\tau)^{p}}\exp\left\{\sum_{j=1}^{p}-\frac{\beta_j^2}{2\tau^2}\right\}
+\end{split}
+\end{equation}
+
+By using Bayes’ Rule, we have:
+\begin{equation}
+\nonumber
+\begin{split}
+P(\beta|y) =& \frac{P(y|\beta)P(\beta)}{P(y)} \\
+=& \frac{\exp\left\{-\sum_{i=1}^{N}\frac{(y_{i}-(\beta_0+x_i^T\beta))^2}{2\sigma^2} - \sum_{j=1}^p\frac{\beta_j^2}{2\tau^2}\right\}}{(\sqrt{2\pi}\sigma)^{N}(\sqrt{2\pi}\tau)^{p}P(y)}
+\end{split}
+\end{equation}
+
+Therefore,
+\begin{equation}
+\nonumber
+\begin{split}
+-logP(\beta|y) =& -log\frac{P(y|\beta)P(\beta)}{P(y)} \\
+=& -log\frac{\exp\left\{-\sum_{i=1}^{N}\frac{(y_{i}-(\beta_0+x_i^T\beta))^2}{2\sigma^2} -\sum_{j=1}^p\frac{\beta_j^2}{2\tau^2}\right\}}{(\sqrt{2\pi}\sigma)^{N}(\sqrt{2\pi}\tau)^{p}P(y)}\\
+=& \sum_{i=1}^{N}\frac{(y_{i}-(\beta_0+x_i^T\beta))^2}{2\sigma^2} + \sum_{j=1}^p\frac{\beta_j^2}{2\tau^2} - log\{(\sqrt{2\pi}\sigma)^{N}(\sqrt{2\pi}\tau)^{p}P(y)\}\\
+=& \frac{1}{2\sigma^2}\left\{\sum_{i = 1}^N(y_i-(\beta _0 + x_i^T\beta))^2 +\sum_{j = 1}^p \frac{\sigma ^2}{\tau ^2}\beta _j^2\right\} + constant\\
+\propto& \sum_{i = 1}^N(y_i - \beta _0 - \sum_{j = 1}^{p}x_{ij}\beta _j)^2 + \lambda \sum_{j = 1}^p \beta _j^2
+\end{split}
+\end{equation}
+The proportional holds if we ignore the constant.
+\end{sol}
+
+\end{document}

@@ -1,0 +1,149 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{bm}
+
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed}
+
+\begin{document}
+\author{Chen Cheng, 1130339005}
+\title{Homework of Chapter 7}
+\maketitle
+%% 7.1
+\begin{flushleft}
+\textbf{Ex. 7.1}
+\end{flushleft}
+\def \Y {\mathbf{Y}}
+\def \X {\mathbf{X}}
+\def \H {\mathbf{H}}
+\begin{sol}
+Because $\hat{y}$ is obtained by a linear fit, we have $\hat{\mathbf{y}}=\X(\X^T\X)^{-1}\X^T\mathbf{y}$. We note $\X(\X^T\X)^{-1}\X^T$ to be $\H$.
+\begin{equation*}
+\begin{split}
+\sum_{i=1}^NCov(\hat{y}_i,y_i)=&trace(Cov(\hat{\mathbf{y}},\mathbf{y}))\\
+=&trace(Cov(\H \mathbf{y},\mathbf{y}))\\
+=&trace(\H \hspace{0.5ex} Cov(\mathbf{y},\mathbf{y}))\\
+=&trace(\H \hspace{0.5ex} Var(\mathbf{y}))\\
+=&trace(\H(\sigma_\varepsilon^2\mathbf{I}))\\
+=&\sigma_\varepsilon^2trace(\H)\\
+=&\sigma_\varepsilon^2trace(\X(\X^T\X)^{-1}\X^T)\\
+=&\sigma_\varepsilon^2trace(\X^T\X(\X^T\X)^{-1})\\
+=&\sigma_\varepsilon^2trace(\mathbf{I}_d)\\
+=&d\sigma_\varepsilon^2\\
+\end{split}
+\end{equation*}
+combine this result with (7.22):
+$$E_{\mathbf{y}}(Err_{in})=E_{\mathbf{y}}(\overline{err})+\frac{2}{N}\sum_{i=1}^NCov(\hat{y}_i,y_i)$$
+we have
+$$E_{\mathbf{y}}(Err_{in})=E_{\mathbf{y}}(\overline{err})+2*\frac{d}{N}\sigma_\varepsilon^2$$
+\end{sol}
+\let \Y \undefined
+\let \X \undefined
+\let \H \undefined
+
+%% 7.3
+\begin{flushleft}
+\textbf{Ex. 7.3}
+\end{flushleft}
+\def \X {\mathbf{X}}
+\def \S {\mathbf{S}}
+\def \x {\mathbf{x}}
+\def \y {\mathbf{y}}
+\def \A {\mathbf{A}}
+\begin{sol}
+(a) We can use the solution of Ex 5.13 to prove this problem.\\
+Smoothing matrix:
+$$\S_{\lambda}=\X(\X^T\X+\lambda\mathbf{\Omega})^{-1}\X^T$$
+$$\S_{ii}=\x_i^T(\X^T\X+\lambda\mathbf{\Omega})^{-1}\x_i$$
+The linear fitting function:
+$$\hat{f}(\x_i)=\x_i^T(\X^T\X+\lambda\mathbf{\Omega})^{-1}\X^T\y$$
+Denote$\X_{(-i)}$and$\y_{(-i)}$be the matrix and the corresponding output after the removal of $\x_i$. So the linear fitting function turns to:
+$$\hat{f}^{(-i)}(\x_i)=\x_i^T(\X_{(-i)}^T\X_{(-i)}+\lambda\mathbf{\Omega})^{-1}\X_{(-i)}^T\y_{(-i)}$$
+Note that 
+$$\X_{(-i)}^T\X_{(-i)}=\X^T\X-\x_i\x_i^T$$
+$$\X_{(-i)}^T\y_{(-i)}=\X^T\y-\x_i\y_i$$
+Lemma:
+$$(\A+\mathbf{uv}^T)^{-1}=\A^{-1}-\frac{\A^{-1}\mathbf{uv}^T\A^{-1}}{1+\mathbf{u}^T\A^{-1}\mathbf{v}}$$
+Denote: 
+$$\A=\X^T\X+\lambda\mathbf{\Omega}$$
+So,
+\begin{equation*}
+\begin{split}
+\x_i^T(\X_{(-i)}^T\X_{(-i)}+\lambda\mathbf{\Omega})^{-1}&=\x_i^T(\A-\x_i\x_i^T)^{-1}\\
+&=\x_i^T\A^{-1}+\frac{\x_i^T\A^{-1}\x_i\x_i^{T}\A^{-1}}{1-\x_i^T\A^{-1}\x_i}\\
+&=\x_i^T\A^{-1}+\frac{\S_{ii}\x_i^T\A^{-1}}{1-\S_{ii}}
+\end{split}
+\end{equation*}
+then,
+\begin{equation*}
+\begin{split}
+\hat{f}^{(-i)}(\x_i)&=(\x_i^T\A^{-1}+\frac{\S_{ii}\x_i^T\A^{-1}}{1-\S_{ii}})(\X^T\y-\x_i\y_i)\\
+&=\x_i^T\A^{-1}\X^T\y+\frac{\S_{ii}\x_i^T\A^{-1}}{1-\S_{ii}}\X^T\y-\frac{\S_{ii}\x_i^T\A^{-1}}{1-\S_{ii}}\x_i\y_i-\x_i^T\A^{-1}\x_i\y_i\\
+&=\hat{f}(\x_i)+\frac{\S_{ii}\hat{f}(\x_i)}{1-\S_{ii}}-\frac{\S_{ii}\S_{ii}}{1-\S_{ii}}\y_i-\S_{ii}\y_{i}\\
+&=\frac{\hat{f}(\x_i)}{1-\S_{ii}}-\frac{\y_i\S_{ii}}{1-\S_{ii}}
+\end{split}
+\end{equation*}
+Then we have:
+$$\y_i-\hat{f}^{(-i)}(\x_i)=\frac{\y_i-\hat{f}(\x_i)}{1-\S_{ii}}$$
+(b) It's obvious that $0 \leq S_{ii} \leq 1$, so we get the conclusion.\\
+(c) If the recipe for producing $\hat{f}$ from $y$ does not depend on $y$ itself and $S$ depends only on the $x_i$ and $\lambda$, result (7.64) hold.\\
+\end{sol}
+
+\newpage
+%% 7.4
+\begin{flushleft}
+\textbf{Ex. 7.4}
+\end{flushleft}
+\begin{sol}
+Because $\mathbf{y}$ and $Y^0$ are i.i.d., we have $E_{Y^0}(Y_i^0)=E_{\mathbf{y}}(y_i)$ and $E_{Y^0}((Y_i^0)^2)=E_{\mathbf{y}}(y_i^2)$, let $\hat{y}_i=\hat{f}(x_i)$, Therefore,
+\begin{equation*}
+\begin{split}
+\omega=&E_{\mathbf{y}}(op)\\
+=&E_{\mathbf{y}}(Err_{in}-\overline{err})\\
+=&\frac{1}{N}\sum_{i=1}^NE_{\mathbf{y}}[E_{Y^0}(Y_i^0-\hat{f}(x_i))^2-(y_i-\hat{f}(x_i)^2)]\\
+=&\frac{1}{N}\sum_{i=1}^NE_{\mathbf{y}}[E_{Y^0}((Y_i^0)^2)-2\hat{y_i}E_{Y^0}(Y_i^0)+\hat{y_i}^2-(y_i^2-2y_i\hat{y}_i+\hat{y}_i^2)]\\
+=&\frac{1}{N}\sum_{i=1}^N[E_{Y^0}((Y_i^0)^2)-2E_{\mathbf{y}}(\hat{y_i})E_{Y^0}(Y_i^0)-E_{\mathbf{y}}(y_i^2)+2E_{\mathbf{y}}(y_i\hat{y}_i)]\\
+=&\frac{2}{N}\sum_{i=1}^N[-E_{\mathbf{y}}(\hat{y_i})E_{\mathbf{y}}(y_i)+E_{\mathbf{y}}(y_i\hat{y}_i)]\\
+=&\frac{2}{N}\sum_{i=1}^NCov(\hat{y}_i,y_i)\\
+\end{split}
+\end{equation*}
+\end{sol}
+
+%% 7.5
+\begin{flushleft}
+\textbf{Ex. 7.5}
+\end{flushleft}
+\def \y {\mathbf{y}}
+\def \s {\mathbf{S}}
+
+\iffalse %
+$$Cov(\hat{\y}_i,\y_i)=E[(\hat{y}_i-E\hat{y}_i)(y_i-Ey_i)]$$
+because $\hat{y}=Sy$, so $\hat{y}_i=s_iy$, the $s_i$ is the row vector of $S$. So,
+$$Cov(\hat{\y}_i,\y_i)=E[(\sum_{j=1}^Ns_{ij}y_j-E\sum_{j=1}^Ns_{ij}y_j)(y_i-Ey_i)]$$
+$$=E[\sum_{j=1}^Ns_{ij}(y_j-Ey_j)(y_i-Ey_i)]$$
+$$=\sum_{j=1}^Ns_{ij}Cov(y_j,y_i)$$
+As $Cov(y_j,y_i)=0$ when $i \neq j$, so
+$$Cov(\hat{y_i},y_i)=s_{ii}Cov(y_i,y_i)=s_{ii}Dy_{i}=s_{ii}\sigma_\varepsilon^2$$
+so 
+$$\sum_{i=1}^NCov(\hat{y_i},y_i)=\sum_{i=1}^Ns_{ii}\sigma_\varepsilon^2=trace(S)\sigma_\varepsilon^2$$
+\fi %
+
+\begin{sol}
+\begin{equation*}
+\begin{split}
+\sum_{i=1}^NCov(\hat{\y}_i,\y_i)=&trace(Cov(\hat{\y},\y))\\
+=&trace(Cov(\s\y,\y))\\
+=&trace(\s \hspace{0.5ex} Cov(\y,\y))\\
+=&trace(\s \hspace{0.5ex} Var(\y))\\
+=&trace(\s(\sigma_\varepsilon^2\mathbf{I}))\\
+=&trace(\s)\sigma_\varepsilon^2\\
+\end{split}
+\end{equation*}
+\end{sol}
+\end{document} 
